@@ -98,6 +98,12 @@ QueryParams.prototype = {
     merge: function merge(obj) {
         var self = this;
 
+        if (!typeChecker.isObject(obj)) {
+            throw {
+                error: "Parameter Obj Must Be An Object"
+            };
+        }
+
         Object.assign(self.params, obj);
 
         return self;
@@ -153,14 +159,8 @@ QueryParams.prototype = {
     }
 };
 
-QueryParams.toQueryString = function toQueryString(obj, base) {
-    if (!typeChecker.isObject(obj)) {
-        throw {
-            error: "Parameter Obj Must Be An Object"
-        };
-    }
-
-    return [base || '', objToQueryString(obj, 0, 0)].join("");
+QueryParams.toQueryString = function toQueryString(base, obj) {
+    return QueryParams().merge(obj).toUrl(base);
 };
 
 QueryParams.parseQuery = function parseQuery(url) {

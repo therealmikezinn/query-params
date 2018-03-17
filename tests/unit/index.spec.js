@@ -9,7 +9,7 @@ describe('QueryParams', function() {
         let instance;
 
         beforeEach(function() {
-            instance = QueryParams('http://www.example.com?varOne=12&varTwo=13')
+            instance = QueryParams('http://www.example.com?varOne=12&varTwo=13');
         });
 
         it('Get all should return an approprate object', function () {
@@ -119,5 +119,29 @@ describe('QueryParams', function() {
         it('toUrl should return http://www.example.com', function(){
             expect(instance.toUrl('http://www.example.com')).to.equal('http://www.example.com');
         });
+    });
+
+    describe('toQueryString', function(){
+        it('Should return the url', function(){
+            const uri = QueryParams.toQueryString('http://www.example.com', {
+                varOne: '12',
+                varTwo: '13',
+            });
+
+            expect(uri).to.equal('http://www.example.com?varOne=12&varTwo=13');
+        });
+    });
+
+    describe('parseQuery', function(){
+        it('Should parse the query into an object', function(){
+            expect(QueryParams.parseQuery('http://www.example.com?varOne=12&varTwo=13')).to.deep.equal({
+                varOne: '12',
+                varTwo: '13',
+            });
+        });
+    });
+
+    describe('queryBuilder', function(){
+
     });
 });
