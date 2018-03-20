@@ -24,7 +24,7 @@ describe('QueryParams', function() {
         });
 
         it('Should be equal to original query string when stringifed', function () {
-            expect(instance.toString()).to.equal('?varOne=12&varTwo=13');
+            expect(instance.stringify()).to.equal('?varOne=12&varTwo=13');
         });
 
         it('Contains should return true for valid props', function(){
@@ -123,10 +123,10 @@ describe('QueryParams', function() {
 
     describe('toQueryString', function(){
         it('Should return the url', function(){
-            const uri = QueryParams.toQueryString('http://www.example.com', {
+            const uri = QueryParams.toQueryString({
                 varOne: '12',
                 varTwo: '13',
-            });
+            }, 'http://www.example.com');
 
             expect(uri).to.equal('http://www.example.com?varOne=12&varTwo=13');
         });

@@ -10,6 +10,13 @@ var _require = require('./encoder'),
 var _require2 = require('./query-builder'),
     objToQueryString = _require2.objToQueryString;
 
+/**
+ * @param uri
+ * @return {QueryParams}
+ * @constructor
+ */
+
+
 function QueryParams(uri) {
     if (!(this instanceof QueryParams)) {
         return new QueryParams(uri);
@@ -44,6 +51,11 @@ function QueryParams(uri) {
 }
 
 QueryParams.prototype = {
+    /**
+     * @param key
+     * @param value
+     * @return {QueryParams}
+     */
     append: function append(key, value) {
         var self = this;
 
@@ -57,6 +69,11 @@ QueryParams.prototype = {
 
         return self;
     },
+
+    /**
+     * @param keys
+     * @return {boolean}
+     */
     contains: function contains(keys) {
         var self = this;
 
@@ -74,11 +91,11 @@ QueryParams.prototype = {
 
         return true;
     },
-    has: function has(key) {
-        var self = this;
 
-        return self.params ? {}.hasOwnProperty.call(self.params, key) : false;
-    },
+    /**
+     * @param key
+     * @return {object}
+     */
     get: function get(key) {
         var self = this;
 
@@ -90,11 +107,30 @@ QueryParams.prototype = {
             return self.params[key];
         }
     },
+
+    /**
+     * @return {object}
+     */
     getAll: function getAll() {
         var self = this;
 
         return Object.assign({}, self.params);
     },
+
+    /**
+     * @param key
+     * @return {boolean}
+     */
+    has: function has(key) {
+        var self = this;
+
+        return self.params ? {}.hasOwnProperty.call(self.params, key) : false;
+    },
+
+    /**
+     * @param obj
+     * @return {QueryParams}
+     */
     merge: function merge(obj) {
         var self = this;
 
@@ -108,6 +144,11 @@ QueryParams.prototype = {
 
         return self;
     },
+
+    /**
+     * @param keys
+     * @return {object}
+     */
     pick: function pick(keys) {
         var self = this;
 
@@ -123,6 +164,12 @@ QueryParams.prototype = {
 
         return temp;
     },
+
+    /**
+     * @param key
+     * @param value
+     * @return {QueryParams}
+     */
     set: function set(key, value) {
         var self = this;
 
@@ -136,6 +183,12 @@ QueryParams.prototype = {
 
         return self;
     },
+
+    /**
+     * @param key
+     * @param value
+     * @return {QueryParams}
+     */
     setOrAppend: function setOrAppend(key, value) {
         var self = this;
 
@@ -147,26 +200,50 @@ QueryParams.prototype = {
 
         return self;
     },
-    toString: function toString() {
+
+    /**
+     * @return {string}
+     */
+    stringify: function stringify() {
         var self = this;
 
         return objToQueryString(self.params, 0, 0);
     },
-    toUrl: function toUrl(base) {
+
+    /**
+     * @param prefix
+     * @param postfix
+     * @return {string}
+     */
+    toUrl: function toUrl(prefix, postfix) {
         var self = this;
 
-        return [base, self.toString()].join("");
+        return [prefix, self.stringify(), postfix].join("");
     }
 };
 
-QueryParams.toQueryString = function toQueryString(base, obj) {
-    return QueryParams().merge(obj).toUrl(base);
+/**
+ * @param obj
+ * @param prefix
+ * @param postfix
+ * @return {string}
+ */
+QueryParams.toQueryString = function toQueryString(obj, prefix, postfix) {
+    return QueryParams().merge(obj).toUrl(prefix, postfix);
 };
 
-QueryParams.parseQuery = function parseQuery(url) {
-    return QueryParams(url).getAll();
+/**
+ * @param uri
+ * @return {object}
+ */
+QueryParams.parseQuery = function parseQuery(uri) {
+    return QueryParams(uri).getAll();
 };
 
+/**
+ * @param obj
+ * @return {QueryParams}
+ */
 QueryParams.queryBuilder = function queryBuilder(obj) {
     return QueryParams().merge(obj);
 };
